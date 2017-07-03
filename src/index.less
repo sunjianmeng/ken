@@ -1,0 +1,156 @@
+/* less用 @ 声明变量 */
+/* 简单变量 */
+@color:blue;
+#d2{
+	width: 250px;
+	height: 250px;
+	border: 1px solid @color;
+}
+/* 选择器变量 */
+@str:s1;
+@str1:s2;
+#@{str}{
+	background: red;
+}
+.@{str1}{
+	background: #555;
+}
+/* url变量 */
+@imgPath:"../images";
+#d2{
+	background: url('@{imgPath}/u2.jpg');
+	background-size: 100% 100%;
+}
+/* 属性变量 */
+@cor:color;
+.p1{
+	@{cor}:skyblue;
+}
+/* 变量的嵌套 */
+@aaa:30px;
+@bbb:aaa;
+@ccc:@aaa;
+.p2{
+	font-size: @@bbb;
+	@{cor}:tomato;
+}
+.p3{
+	font-size: @ccc+10;/*变量也有＋－＊／运算*/
+	@{cor}:tomato;
+}
+/* 变量延迟加载，即可以在定义变量之前使用 */
+#d1{
+	text-decoration: @ddd;
+}
+@ddd:underline;
+/* 总结：1.除了简单变量之后，其它变量在调用的时候都要加{} */
+/* 2.建议先声明变量再使用，同时将声明放在代码的最前面 */
+/* 混合minin */
+/* 1.普通混合，没有参数(引用另一个样式) */
+#d3{
+	#d2;/*会继承所有含有引用id的样式*/
+}
+/* 2.带参混合,一个参数 minin可以以.开头*/
+.fn(@color){/*@color相当于形参，自定义名称；.fn相当于一个函数，自定义名称。*/
+	color:@color;
+}
+.p4{
+	.fn(green);/*相当于调用.fn函数，green是实參*/
+}
+/* 3.带参混合,一个参数 minin可以以#开头*/
+#fn(@color){/*@color相当于形参，自定义名称*/
+	color:@color;
+}
+.p5{
+	#fn(green);
+}
+/* 4.多个参数 */
+#fn1(@color,@width,@height,@border){/*#fn1相当于构造函数*/
+	color:@color;/*相当于thiscolor=@color*/
+	width:@width;
+	height:@height;
+	border:@border;
+}
+.p6{/*#fn1相当于new一个对象*/
+	#fn1(tomato,100px,30px,1px solid blue);
+}
+/* 导引表达式，使用when进行判断 */
+.fn2(@font-size)when(@font-size<20){
+	font-size:30px;
+	color:red;
+}
+.fn2(@font-size) when(@font-size>=20){
+	font-size:50px;
+	color:yellow;
+}
+.fn2(@font-size){/*总是会匹配*/
+	background-color: #ccc;
+}
+.p7{
+	.fn2(20);
+}
+/* 单位函数unit(值,单位):改变或移除数据单位 */
+.p8{
+	font-size:unit(10,px);
+}
+.p9{
+	font-size:unit(3px,rem);/*如果前面的值有单位，unit函数会将其单位移除(移除数据单位),继承后面的单位(改变数据单位)*/
+}
+.p10{
+	font-size:unit(20px);/*如果只有值，unit函数会将其单位移除*/
+}
+/* convert(有单位的值，要转换成的单位)单位转换函数(后面的单位要比前面值的单位要大，否则无法转换) ;color(string)函数将字符串或者转义后的值转换成颜色*/
+.p11{
+	animation-delay:convert(3000ms,s);
+	color:@color(blue);
+	font-size:unit(8,px);
+}
+.p12{
+	animation-delay:convert(2s,ms);/*无法转换，返回的是原始数据*/
+	color:color(red);
+	font-size:unit(15,px);
+}
+/*darken(@color,(亮度降低百分比值))  lighten(@color,(亮度增加百分比值))  mix(@color1,@color2,百分比)*/
+.p13{
+	background-color:darken(red,10%);
+}
+.p14{
+	background-color:lighten(green,23%);
+}
+.p15{
+	background-color:mix(red,blue,50%);/*混合两种颜色*/
+}
+/* data-uri()函数 */
+.p16{
+	width: 100px;
+	height: 40px;
+	background: url('@{imgPath}/u5.jpg');
+	background-size: 100% 100%;
+}
+.p17{
+	width: 100px;
+	height: 40px;
+	background: data-uri('@{imgPath}/star2.jpg');/*转换成字节数据，即使将源图片删除也可以访问到图片*/
+	background-size: 100% 100%;
+}
+/* .p17{ */
+	/* width: 100px; */
+	/* height: 40px; */
+	/* background: data-uri('@{imgPath}/u3.jpg');*//*图片大小不能超过32k*/
+	/* background-size: 100% 100%; */
+/* } */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
